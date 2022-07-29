@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Web200\Seo\Model;
 
+use Nimasystems\Base\Utils\Generic\Unicode;
 use Web200\Seo\Api\Data\PropertyInterface;
 
 /**
@@ -85,7 +86,7 @@ final class Property implements PropertyInterface
     {
         $description = $this->getFilteredInput($description);
         if (strlen($description) >= self::MAX_DESCRIPTION_LENGTH) {
-            $description = substr($description, 0, (self::MAX_DESCRIPTION_LENGTH - 4)) . ' ...';
+            $description = Unicode::substr($description, 0, (self::MAX_DESCRIPTION_LENGTH - 4)) . ' ...';
         }
         return $this->addProperty(
             'description',
@@ -164,14 +165,14 @@ final class Property implements PropertyInterface
         return $this;
     }
 
-    public function toHtml(string $group = self::DEFAULT_GROUP) : string
+    public function toHtml(string $group = self::DEFAULT_GROUP): string
     {
         $html = $this->renderProperties($this->properties, $group);
         $this->resetValues($group);
         return $html;
     }
 
-    public function hasData(string $group = self::DEFAULT_GROUP) : bool
+    public function hasData(string $group = self::DEFAULT_GROUP): bool
     {
         if ($this->properties[$group] ?? false) {
             return true;
@@ -179,7 +180,7 @@ final class Property implements PropertyInterface
         return false;
     }
 
-    private function renderProperties(array $properties, string $group = self::DEFAULT_GROUP) : string
+    private function renderProperties(array $properties, string $group = self::DEFAULT_GROUP): string
     {
         $html = [];
 
@@ -204,7 +205,7 @@ final class Property implements PropertyInterface
         return implode($html);
     }
 
-    private function getMetaTag(string $key, string $value) : string
+    private function getMetaTag(string $key, string $value): string
     {
         return sprintf(
             '<meta %s="%s%s" content="%s" />%s',
@@ -216,7 +217,7 @@ final class Property implements PropertyInterface
         );
     }
 
-    private function getFilteredInput(string $input) : string
+    private function getFilteredInput(string $input): string
     {
         $input = trim(strip_tags(str_replace(["\r\n", "\r", "\n"], "", $input)));
         $input = preg_replace('/\s+/', ' ', $input);
