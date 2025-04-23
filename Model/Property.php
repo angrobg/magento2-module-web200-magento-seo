@@ -121,18 +121,6 @@ final class Property implements PropertyInterface
         if (in_array($extension, $this->validImageFormats)) {
             return $this->addProperty('image', $image);
         }
-        // NIMA changes: disabled as it causes sporadic exceptions when images are invalid
-        // we just skip adding the property in this case instead!
-//        throw new \LogicException(
-//            sprintf(
-//                'Invalid image format provided: [%s], please use on of these [%s]',
-//                $extension,
-//                implode(
-//                    ',',
-//                    $this->validImageFormats
-//                )
-//            )
-//        );
     }
 
     /**
