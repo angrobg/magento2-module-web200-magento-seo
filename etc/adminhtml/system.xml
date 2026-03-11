@@ -121,6 +121,24 @@
                     </depends>
                 </field>
             </group>
+            <group id="faq" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>FAQ</label>
+
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable FAQ</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="json" translate="label comment" type="textarea" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>FAQ JSON</label>
+                    <comment>Paste valid JSON without script tags.</comment>
+                    <depends>
+                        <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
             <group id="canonical" translate="label,comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Canonical</label>
                 <field id="add_rel_pagination" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
