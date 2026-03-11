@@ -1,0 +1,13 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Web200\Seo\ViewModel\Faq $faqViewModel
+ */
+
+$faqViewModel = $block->getData('faq_view_model');
+
+if ($websiteJsonData = $faqViewModel->getJsonData()) {
+    echo $secureRenderer->renderTag('script', ['type' => 'application/ld+json'], $websiteJsonData, false);
+}
