@@ -12,8 +12,14 @@
                    template="Web200_Seo::microdata/default.phtml" />
             <block class="Web200\Seo\Block\MicroData\SitelinksSearchbox" name="micro_data_sitelinks_searchbox" ifconfig="seo/microdata/active"
                    template="Web200_Seo::microdata/default.phtml" />
-            <block class="Web200\Seo\Block\MicroData\Organization" name="micro_data_organization" ifconfig="seo/microdata/active"
-                   template="Web200_Seo::microdata/default.phtml" />
+            <block ifconfig="seo/general/active"
+                   template="Web200_Seo::markup.phtml"
+            >
+                <arguments>
+                    <argument name="organization_view_model" xsi:type="object">Web200\Seo\ViewModel\Organization
+                    </argument>
+                </arguments>
+            </block>
         </referenceBlock>
     </body>
 </page>

@@ -1,0 +1,13 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Web200\Seo\ViewModel\Organization $organizationViewModel
+ */
+
+$organizationViewModel = $block->getData('organization_view_model');
+
+if ($organizationJsonData = $organizationViewModel->getJsonData()) {
+    echo $secureRenderer->renderTag('script', ['type' => 'application/ld+json'], $organizationJsonData, false);
+}
