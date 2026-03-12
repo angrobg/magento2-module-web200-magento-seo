@@ -5,6 +5,23 @@
             <label>Search Engine Optimization</label>
             <tab>general</tab>
             <resource>Web200_Seo::seo</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="remove_native_rs" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Remove Native Rich Snippet</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="image_path" translate="label comment" type="image" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logo</label>
+                    <backend_model>Web200\Seo\Model\Config\Backend\Image</backend_model>
+                    <base_url type="media" scope_info="1">seomarkup</base_url>
+                    <comment><![CDATA[Allowed file types: JPG, JPEG, GIF, PNG]]></comment>
+                </field>
+            </group>
             <group id="verifications" translate="label,comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Site Verification Codes</label>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -136,6 +153,133 @@
                     <comment>Paste valid JSON without script tags.</comment>
                     <depends>
                         <field id="enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="organization" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Organization Markup</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="id" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Organization ID</label>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="is_custom_name" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Organization Name</label>
+                    <source_model>Web200\Seo\Model\Config\Source\CustomValue</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="custom_name" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Organization Name Value</label>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="is_custom_name">1</field>
+                    </depends>
+                </field>
+                <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Organization URL</label>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="include_address" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Include Address</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+                <field id="is_custom_street" translate="label" type="select" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Street</label>
+                    <source_model>Web200\Seo\Model\Config\Source\CustomValue</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="include_address">1</field>
+                    </depends>
+                </field>
+                <field id="custom_street" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Street Value</label>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="is_custom_street">1</field>
+                        <field id="include_address">1</field>
+                    </depends>
+                </field>
+                <field id="is_custom_city" translate="label" type="select" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>City</label>
+                    <source_model>Web200\Seo\Model\Config\Source\CustomValue</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="include_address">1</field>
+                    </depends>
+                </field>
+                <field id="custom_city" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>City Value</label>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="is_custom_city">1</field>
+                        <field id="include_address">1</field>
+                    </depends>
+                </field>
+                <field id="is_custom_region" translate="label" type="select" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Region</label>
+                    <source_model>Web200\Seo\Model\Config\Source\CustomValue</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="include_address">1</field>
+                    </depends>
+                </field>
+                <field id="custom_region" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Region Value</label>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="is_custom_region">1</field>
+                        <field id="include_address">1</field>
+                    </depends>
+                </field>
+                <field id="is_custom_postcode" translate="label" type="select" sortOrder="85" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Postcode</label>
+                    <source_model>Web200\Seo\Model\Config\Source\CustomValue</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="include_address">1</field>
+                    </depends>
+                </field>
+                <field id="custom_postcode" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Postcode Value</label>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="is_custom_postcode">1</field>
+                        <field id="include_address">1</field>
+                    </depends>
+                </field>
+                <field id="is_custom_country" translate="label" type="select" sortOrder="95" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Country</label>
+                    <source_model>Web200\Seo\Model\Config\Source\CustomValue</source_model>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="include_address">1</field>
+                    </depends>
+                </field>
+                <field id="custom_country" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Country Value (ISO Code)</label>
+                    <depends>
+                        <field id="active">1</field>
+                        <field id="is_custom_country">1</field>
+                        <field id="include_address">1</field>
+                    </depends>
+                </field>
+                <field id="same_as" translate="label" type="textarea" sortOrder="105" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>SameAs URLs</label>
+                    <comment>One URL per line, or comma-separated.</comment>
+                    <depends>
+                        <field id="active">1</field>
                     </depends>
                 </field>
             </group>
