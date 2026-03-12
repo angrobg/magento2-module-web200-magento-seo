@@ -16,8 +16,8 @@
                    template="Web200_Seo::markup.phtml"
             >
                 <arguments>
-                    <argument name="organization_view_model" xsi:type="object">Web200\Seo\ViewModel\Organization
-                    </argument>
+                    <argument name="organization_view_model" xsi:type="object">Web200\Seo\ViewModel\Organization</argument>
+                    <argument name="local_business_view_model" xsi:type="object">Web200\Seo\ViewModel\LocalBusiness</argument>
                 </arguments>
             </block>
         </referenceBlock>

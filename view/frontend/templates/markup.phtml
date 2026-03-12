@@ -4,10 +4,16 @@
  * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  * @var \Web200\Seo\ViewModel\Organization $organizationViewModel
+ * @var \Web200\Seo\ViewModel\LocalBusiness $localBusinessViewModel
  */
 
 $organizationViewModel = $block->getData('organization_view_model');
+$localBusinessViewModel = $block->getData('local_business_view_model');
 
 if ($organizationJsonData = $organizationViewModel->getJsonData()) {
     echo $secureRenderer->renderTag('script', ['type' => 'application/ld+json'], $organizationJsonData, false);
+}
+
+if ($localBusinessJsonData = $localBusinessViewModel->getJsonData()) {
+    echo $secureRenderer->renderTag('script', ['type' => 'application/ld+json'], $localBusinessJsonData, false);
 }

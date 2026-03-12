@@ -36,7 +36,7 @@ class Organization implements ArgumentInterface
         $data = [
             '@context'        => 'https://schema.org',
             '@type'           => 'Organization',
-//            '@id'             => $this->organizationConfig->getOrganizationMarkupId(),
+            '@id'             => $this->organizationConfig->getOrganizationMarkupId(),
             'name'            => $this->organizationConfig->getOrganizationName(),
             'url'             => $this->organizationConfig->getOrganizationUrl(),
             'logo'            => $this->organizationConfig->getStoreLogoUrl(),
