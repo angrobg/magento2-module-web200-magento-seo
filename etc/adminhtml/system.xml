@@ -435,14 +435,12 @@
                     <source_model>Web200\Seo\Model\Config\Source\CustomValue</source_model>
                     <depends>
                         <field id="active">1</field>
-                        <field id="include_contact_point">1</field>
                     </depends>
                 </field>
                 <field id="custom_phone" translate="label" type="text" sortOrder="135" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Local Business Phone Value</label>
                     <depends>
                         <field id="active">1</field>
-                        <field id="include_contact_point">1</field>
                         <field id="is_custom_phone">1</field>
                     </depends>
                 </field>

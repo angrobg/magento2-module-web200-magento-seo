@@ -35,10 +35,12 @@ class LocalBusiness implements ArgumentInterface
         $data = [
             '@context'        => 'https://schema.org',
             '@type'           => 'LocalBusiness',
-            '@id'             => $this->localBusinessConfig->getLocalBusinessMarkupId(),
+//            '@id'             => $this->localBusinessConfig->getLocalBusinessMarkupId(),
             'name'            => $this->localBusinessConfig->getLocalBusinessName(),
             'url'             => $this->localBusinessConfig->getWebsiteUrl(),
             'logo'            => $this->localBusinessConfig->getStoreLogoUrl(),
+            'telephone'       => $this->localBusinessConfig->getLocalBusinessPhone(),
+            'priceRange'      => '€€'
         ];
 
         $sameAs = $this->localBusinessConfig->getLocalBusinessSameAs();
