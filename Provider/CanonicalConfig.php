@@ -24,6 +24,13 @@ class CanonicalConfig
      * @var string ADD_REL_PAGINATION
      */
     protected const ADD_REL_PAGINATION = 'seo/canonical/add_rel_pagination';
+
+    /**
+     * Brand list page canonical enable
+     *
+     * @var string BRAND_LIST_CANONICAL_ENABLE
+     */
+    protected const BRAND_LIST_CANONICAL_ENABLE = 'seo/canonical/brand_list';
     /**
      * Simple product sitemap
      *
@@ -76,6 +83,18 @@ class CanonicalConfig
     public function isRelPagination($store = null): bool
     {
         return (bool)$this->scopeConfig->getValue(self::ADD_REL_PAGINATION, ScopeInterface::SCOPE_STORES, $store);
+    }
+
+    /**
+     * Is active canonical for brand list page
+     *
+     * @param mixed $store
+     *
+     * @return bool
+     */
+    public function isBrandListActive($store = null): bool
+    {
+        return (bool)$this->scopeConfig->getValue(self::BRAND_LIST_CANONICAL_ENABLE, ScopeInterface::SCOPE_STORES, $store);
     }
 
     /**
