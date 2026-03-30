@@ -26,6 +26,13 @@ class CanonicalConfig
     protected const ADD_REL_PAGINATION = 'seo/canonical/add_rel_pagination';
 
     /**
+     * Add brand rel pagination
+     *
+     * @var string ADD_REL_PAGINATION
+     */
+    protected const ADD_BRAND_REL_PAGINATION = 'seo/canonical/add_brand_rel_pagination';
+
+    /**
      * Brand list page canonical enable
      *
      * @var string BRAND_LIST_CANONICAL_ENABLE
@@ -157,5 +164,17 @@ class CanonicalConfig
     public function isBrandViewActive($store = null): bool
     {
         return (bool)$this->scopeConfig->getValue(self::BRAND_VIEW_CANONICAL_ENABLE, ScopeInterface::SCOPE_STORES, $store);
+    }
+
+    /**
+     * Is brand rel pagination
+     *
+     * @param mixed $store
+     *
+     * @return bool
+     */
+    public function isBrandRelPagination($store = null): bool
+    {
+        return (bool)$this->scopeConfig->getValue(self::ADD_BRAND_REL_PAGINATION, ScopeInterface::SCOPE_STORES, $store);
     }
 }
