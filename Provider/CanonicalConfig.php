@@ -32,6 +32,12 @@ class CanonicalConfig
      */
     protected const BRAND_LIST_CANONICAL_ENABLE = 'seo/canonical/brand_list';
     /**
+     * Brand list page canonical enable
+     *
+     * @var string BRAND_LIST_CANONICAL_ENABLE
+     */
+    protected const BRAND_VIEW_CANONICAL_ENABLE = 'seo/canonical/brand_view';
+    /**
      * Simple product sitemap
      *
      * @var string SIMPLE_PRODUCT_SITEMAP
@@ -139,5 +145,17 @@ class CanonicalConfig
     public function getStorePreferenceStore(): int
     {
         return (int)$this->scopeConfig->getValue(self::STORE_PREFERENCE_STORE);
+    }
+
+    /**
+     * Is active canonical for brand view page
+     *
+     * @param mixed $store
+     *
+     * @return bool
+     */
+    public function isBrandViewActive($store = null): bool
+    {
+        return (bool)$this->scopeConfig->getValue(self::BRAND_VIEW_CANONICAL_ENABLE, ScopeInterface::SCOPE_STORES, $store);
     }
 }
