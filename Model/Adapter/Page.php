@@ -9,6 +9,9 @@ use Magento\Framework\UrlInterface;
 use Web200\Seo\Api\Data\AdapterInterface;
 use Web200\Seo\Api\Data\PropertyInterface;
 use Web200\Seo\Model\Property;
+use Web200\Seo\Model\Store\LocaleProvider;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class Page
@@ -21,6 +24,8 @@ use Web200\Seo\Model\Property;
  */
 class Page implements AdapterInterface
 {
+    const HOME_PAGE_TYPE = 'website';
+    const CMS_PAGE_TYPE = 'article';
     /**
      * Property interface
      *
@@ -41,20 +46,36 @@ class Page implements AdapterInterface
     protected $url;
 
     /**
+     * @var LocaleProvider
+     */
+    private LocaleProvider $localeProvider;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private ScopeConfigInterface $scopeConfig;
+
+    /**
      * Page constructor.
      *
-     * @param CmsPage           $page
-     * @param UrlInterface      $url
+     * @param CmsPage $page
+     * @param UrlInterface $url
      * @param PropertyInterface $property
+     * @param LocaleProvider $localeProvider
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         CmsPage $page,
         UrlInterface $url,
-        PropertyInterface $property
+        PropertyInterface $property,
+        LocaleProvider $localeProvider,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->property = $property;
         $this->page     = $page;
         $this->url      = $url;
+        $this->localeProvider = $localeProvider;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -69,8 +90,26 @@ class Page implements AdapterInterface
             $this->property->setDescription((string)$this->page->getMetaDescription());
             $this->property->setUrl((string)$this->url->getUrl($this->page->getIdentifier()));
             $this->property->addProperty('item', $this->page->getData(), Property::META_DATA_GROUP);
+            $type = $this->isHomePage($this->page) ? self::HOME_PAGE_TYPE : self::CMS_PAGE_TYPE;
+            $this->property->addProperty('type', $type);
+            $locale = $this->localeProvider->getOgLocale();
+
+            if ($locale) {
+                $this->property->addProperty('locale', $this->localeProvider->getOgLocale());
+            }
+
         }
 
         return $this->property;
+    }
+
+    private function isHomePage(CmsPage $page): bool
+    {
+        $homePageIdentifier = (string)$this->scopeConfig->getValue(
+            'web/default/cms_home_page',
+            ScopeInterface::SCOPE_STORE
+        );
+
+        return $page->getIdentifier() === $homePageIdentifier;
     }
 }

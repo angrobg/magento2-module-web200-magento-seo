@@ -7,7 +7,8 @@ namespace Web200\Seo\ViewModel;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\UrlInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Web200\Seo\Model\Adapter\Page;
+use Web200\Seo\Model\Store\LocaleProvider;
 
 class OpenGraph implements ArgumentInterface
 {
@@ -21,19 +22,20 @@ class OpenGraph implements ArgumentInterface
      */
     private UrlInterface $urlBuilder;
 
+
     /**
-     * @var StoreManagerInterface
+     * @var LocaleProvider
      */
-    private StoreManagerInterface $storeManager;
+    private LocaleProvider $localeProvider;
 
     public function __construct(
         PageConfig $pageConfig,
         UrlInterface $urlBuilder,
-        StoreManagerInterface $storeManager
+        LocaleProvider $localeProvider
     ) {
         $this->pageConfig = $pageConfig;
         $this->urlBuilder = $urlBuilder;
-        $this->storeManager = $storeManager;
+        $this->localeProvider = $localeProvider;
     }
 
     public function getOgTitle(): string
@@ -56,14 +58,12 @@ class OpenGraph implements ArgumentInterface
 
     public function getOgType(): string
     {
-        return 'website';
+        return Page::CMS_PAGE_TYPE;
     }
 
     public function getOgLocale(): string
     {
-        return (string)$this->storeManager
-            ->getStore()
-            ->getConfig('general/locale/code');
+        return $this->localeProvider->getOgLocale();
     }
 
     public function hasOgTitle(): bool
