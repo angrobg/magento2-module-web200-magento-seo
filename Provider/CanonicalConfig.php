@@ -24,6 +24,26 @@ class CanonicalConfig
      * @var string ADD_REL_PAGINATION
      */
     protected const ADD_REL_PAGINATION = 'seo/canonical/add_rel_pagination';
+
+    /**
+     * Add brand rel pagination
+     *
+     * @var string ADD_REL_PAGINATION
+     */
+    protected const ADD_BRAND_REL_PAGINATION = 'seo/canonical/add_brand_rel_pagination';
+
+    /**
+     * Brand list page canonical enable
+     *
+     * @var string BRAND_LIST_CANONICAL_ENABLE
+     */
+    protected const BRAND_LIST_CANONICAL_ENABLE = 'seo/canonical/brand_list';
+    /**
+     * Brand list page canonical enable
+     *
+     * @var string BRAND_LIST_CANONICAL_ENABLE
+     */
+    protected const BRAND_VIEW_CANONICAL_ENABLE = 'seo/canonical/brand_view';
     /**
      * Simple product sitemap
      *
@@ -79,6 +99,18 @@ class CanonicalConfig
     }
 
     /**
+     * Is active canonical for brand list page
+     *
+     * @param mixed $store
+     *
+     * @return bool
+     */
+    public function isBrandListActive($store = null): bool
+    {
+        return (bool)$this->scopeConfig->getValue(self::BRAND_LIST_CANONICAL_ENABLE, ScopeInterface::SCOPE_STORES, $store);
+    }
+
+    /**
      * Is cms active
      *
      * @param mixed $store
@@ -120,5 +152,29 @@ class CanonicalConfig
     public function getStorePreferenceStore(): int
     {
         return (int)$this->scopeConfig->getValue(self::STORE_PREFERENCE_STORE);
+    }
+
+    /**
+     * Is active canonical for brand view page
+     *
+     * @param mixed $store
+     *
+     * @return bool
+     */
+    public function isBrandViewActive($store = null): bool
+    {
+        return (bool)$this->scopeConfig->getValue(self::BRAND_VIEW_CANONICAL_ENABLE, ScopeInterface::SCOPE_STORES, $store);
+    }
+
+    /**
+     * Is brand rel pagination
+     *
+     * @param mixed $store
+     *
+     * @return bool
+     */
+    public function isBrandRelPagination($store = null): bool
+    {
+        return (bool)$this->scopeConfig->getValue(self::ADD_BRAND_REL_PAGINATION, ScopeInterface::SCOPE_STORES, $store);
     }
 }

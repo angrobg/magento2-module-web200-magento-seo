@@ -17,6 +17,10 @@
             <microdata>
                 <active>1</active>
             </microdata>
+            <canonical>
+                <brand_list>1</brand_list>
+                <brand_view>1</brand_view>
+            </canonical>
         </seo>
     </default>
 </config>
