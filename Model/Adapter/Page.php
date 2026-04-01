@@ -90,7 +90,16 @@ class Page implements AdapterInterface
             $this->property->setDescription((string)$this->page->getMetaDescription());
             $this->property->setUrl((string)$this->url->getUrl($this->page->getIdentifier()));
             $this->property->addProperty('item', $this->page->getData(), Property::META_DATA_GROUP);
-            $type = $this->isHomePage($this->page) ? self::HOME_PAGE_TYPE : self::CMS_PAGE_TYPE;
+            $type = self::CMS_PAGE_TYPE;
+
+            if ($this->isHomePage($this->page)) {
+                $type = self::HOME_PAGE_TYPE;
+                $ogImage = $this->page->getOpenGraphImageUrl();
+
+                if ($ogImage) {
+                    $this->property->addProperty('image', $ogImage);
+                }
+            }
             $this->property->addProperty('type', $type);
             $locale = $this->localeProvider->getOgLocale();
 
