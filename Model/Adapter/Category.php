@@ -11,6 +11,7 @@ use Web200\Seo\Api\Data\AdapterInterface;
 use Web200\Seo\Api\Data\PropertyInterface;
 use Web200\Seo\Model\BlockParser;
 use Web200\Seo\Model\Property;
+use Web200\Seo\Model\Store\LocaleProvider;
 
 /**
  * Class Category
@@ -49,20 +50,28 @@ class Category implements AdapterInterface
     protected $blockParser;
 
     /**
+     * @var LocaleProvider
+     */
+    private LocaleProvider $localeProvider;
+
+    /**
      * Category constructor.
      *
      * @param PropertyInterface $property
-     * @param BlockParser       $blockParser
-     * @param Registry          $registry
+     * @param BlockParser $blockParser
+     * @param Registry $registry
+     * @param LocaleProvider $localeProvider
      */
     public function __construct(
         PropertyInterface $property,
         BlockParser $blockParser,
-        Registry $registry
+        Registry $registry,
+        LocaleProvider $localeProvider
     ) {
         $this->registry    = $registry;
         $this->property    = $property;
         $this->blockParser = $blockParser;
+        $this->localeProvider = $localeProvider;
     }
 
     /**
@@ -95,6 +104,12 @@ class Category implements AdapterInterface
                 $this->property->setImage((string)$category->getImageUrl());
             }
             $this->property->addProperty('item', $category->getData(), Property::META_DATA_GROUP);
+
+            $locale = $this->localeProvider->getOgLocale();
+
+            if ($locale) {
+                $this->property->addProperty('locale', $this->localeProvider->getOgLocale());
+            }
         }
 
         return $this->property;

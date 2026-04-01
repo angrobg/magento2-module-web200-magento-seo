@@ -11,6 +11,7 @@ use Magento\Framework\Registry;
 use Web200\Seo\Api\Data\AdapterInterface;
 use Web200\Seo\Api\Data\PropertyInterface;
 use Web200\Seo\Model\Property;
+use Web200\Seo\Model\Store\LocaleProvider;
 
 /**
  * Class Product
@@ -53,20 +54,28 @@ class Product implements AdapterInterface
     protected $imageBuilder;
 
     /**
+     * @var LocaleProvider
+     */
+    private LocaleProvider $localeProvider;
+
+    /**
      * Product constructor.
      *
      * @param PropertyInterface $property
-     * @param ImageBuilder      $imageBuilder
-     * @param Registry          $registry
+     * @param ImageBuilder $imageBuilder
+     * @param Registry $registry
+     * @param LocaleProvider $localeProvider
      */
     public function __construct(
         PropertyInterface $property,
         ImageBuilder $imageBuilder,
-        Registry $registry
+        Registry $registry,
+        LocaleProvider $localeProvider
     ) {
         $this->property     = $property;
         $this->registry     = $registry;
         $this->imageBuilder = $imageBuilder;
+        $this->localeProvider = $localeProvider;
     }
 
     /**
@@ -96,6 +105,11 @@ class Product implements AdapterInterface
                 'product'
             );
             $this->property->addProperty('item', $product->getData(), Property::META_DATA_GROUP);
+            $locale = $this->localeProvider->getOgLocale();
+
+            if ($locale) {
+                $this->property->addProperty('locale', $this->localeProvider->getOgLocale());
+            }
         }
 
         return $this->property;
