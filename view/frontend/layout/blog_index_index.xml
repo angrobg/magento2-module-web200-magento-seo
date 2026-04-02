@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block name="open-graph.blog"
+                   template="Web200_Seo::open-graph/blog/og.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Web200\Seo\ViewModel\OpenGraph</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

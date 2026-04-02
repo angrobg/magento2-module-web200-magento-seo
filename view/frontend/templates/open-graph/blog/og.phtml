@@ -1,0 +1,20 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Web200\Seo\ViewModel\OpenGraph $viewModel
+ */
+$viewModel = $block->getData('view_model');
+?>
+
+<?php if ($viewModel->hasOgTitle()): ?>
+    <meta property="og:title" content="<?= $block->escapeHtmlAttr($viewModel->getOgTitle()) ?>" />
+<?php endif; ?>
+
+<meta property="og:url" content="<?= $block->escapeUrl($viewModel->getOgUrl()) ?>" />
+
+<?php if ($viewModel->hasOgDescription()): ?>
+    <meta property="og:description" content="<?= $block->escapeHtmlAttr($viewModel->getOgDescription()) ?>" />
+<?php endif; ?>
+
+<meta property="og:type" content="<?= $block->escapeHtmlAttr($viewModel->getOgType()) ?>" />
+<meta property="og:locale" content="<?= $block->escapeHtmlAttr($viewModel->getOgLocale()) ?>" />
