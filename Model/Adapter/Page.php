@@ -8,6 +8,7 @@ use Magento\Cms\Model\Page as CmsPage;
 use Magento\Framework\UrlInterface;
 use Web200\Seo\Api\Data\AdapterInterface;
 use Web200\Seo\Api\Data\PropertyInterface;
+use Web200\Seo\Helper\Data;
 use Web200\Seo\Model\Property;
 use Web200\Seo\Model\Store\LocaleProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -56,6 +57,11 @@ class Page implements AdapterInterface
     private ScopeConfigInterface $scopeConfig;
 
     /**
+     * @var Data
+     */
+    private Data $helper;
+
+    /**
      * Page constructor.
      *
      * @param CmsPage $page
@@ -63,19 +69,22 @@ class Page implements AdapterInterface
      * @param PropertyInterface $property
      * @param LocaleProvider $localeProvider
      * @param ScopeConfigInterface $scopeConfig
+     * @param Data $helper
      */
     public function __construct(
         CmsPage $page,
         UrlInterface $url,
         PropertyInterface $property,
         LocaleProvider $localeProvider,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        Data $helper
     ) {
         $this->property = $property;
         $this->page     = $page;
         $this->url      = $url;
         $this->localeProvider = $localeProvider;
         $this->scopeConfig = $scopeConfig;
+        $this->helper = $helper;
     }
 
     /**
@@ -90,16 +99,19 @@ class Page implements AdapterInterface
             $this->property->setDescription((string)$this->page->getMetaDescription());
             $this->property->setUrl((string)$this->url->getUrl($this->page->getIdentifier()));
             $this->property->addProperty('item', $this->page->getData(), Property::META_DATA_GROUP);
+
             $type = self::CMS_PAGE_TYPE;
+            $ogImage = $this->helper->getOgDefaultImage();
 
             if ($this->isHomePage($this->page)) {
                 $type = self::HOME_PAGE_TYPE;
                 $ogImage = $this->page->getOpenGraphImageUrl();
-
-                if ($ogImage) {
-                    $this->property->addProperty('image', $ogImage);
-                }
             }
+
+            if ($ogImage) {
+                $this->property->addProperty('image', $ogImage);
+            }
+
             $this->property->addProperty('type', $type);
             $locale = $this->localeProvider->getOgLocale();
 

@@ -16,6 +16,7 @@ class Data extends AbstractHelper
     public const XML_PATH_CONFIG_GENERAL_ACTIVE = 'seo/general/active';
     public const XML_PATH_CONFIG_GENERAL_REMOVE_NATIVE_RICH_SNIPPET = 'seo/general/remove_native_rs';
     public const XML_PATH_CONFIG_GENERAL_IMAGE_PATH = 'seo/general/image_path';
+    public const XML_PATH_CONFIG_GENERAL_OG_IMAGE_PATH = 'seo/general/og_default_image';
 
     protected ?StoreInterface $store = null;
     private StoreManagerInterface $storeManager;
@@ -104,6 +105,30 @@ class Data extends AbstractHelper
                 ]) . $path;
         }
 
+        return $this->getDefaultDesignLogo($storeId);
+    }
+
+    public function getOgDefaultImage($storeId = null): ?string
+    {
+        $defaultOgImagePath = $this->scopeConfig->getValue(
+            self::XML_PATH_CONFIG_GENERAL_OG_IMAGE_PATH,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+
+        if ($defaultOgImagePath !== null) {
+            $path = Image::UPLOAD_DIR . '/' . $defaultOgImagePath;
+
+            return $this->_urlBuilder->getBaseUrl([
+                    '_type' => UrlInterface::URL_TYPE_MEDIA,
+                ]) . $path;
+        }
+
+        return $this->getDefaultDesignLogo($storeId);
+    }
+
+    public function getDefaultDesignLogo($storeId = null): ?string
+    {
         $headerLogoPath = $this->scopeConfig->getValue(
             'design/header/logo_src',
             ScopeInterface::SCOPE_STORE,

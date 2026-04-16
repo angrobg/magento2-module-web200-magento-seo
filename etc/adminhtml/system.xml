@@ -16,10 +16,16 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="image_path" translate="label comment" type="image" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Logo</label>
+                    <label>Google Reach Results Logo</label>
                     <backend_model>Web200\Seo\Model\Config\Backend\Image</backend_model>
                     <base_url type="media" scope_info="1">seomarkup</base_url>
                     <comment><![CDATA[Allowed file types: JPG, JPEG, GIF, PNG]]></comment>
+                </field>
+                <field id="og_default_image" translate="label comment" type="image" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Open Graph Site Image</label>
+                    <backend_model>Web200\Seo\Model\Config\Backend\Image</backend_model>
+                    <base_url type="media" scope_info="1">seomarkup</base_url>
+                    <comment><![CDATA[Allowed file types: JPG, JPEG, PNG]]></comment>
                 </field>
             </group>
             <group id="verifications" translate="label,comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
