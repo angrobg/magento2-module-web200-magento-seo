@@ -29,7 +29,7 @@ class Category implements AdapterInterface
      *
      * @var string[] $messageAttributes
      */
-    protected $messageAttributes = ['meta_description', 'description'];
+    protected $messageAttributes = ['description', 'meta_description'];
     /**
      * Registry
      *
@@ -89,10 +89,16 @@ class Category implements AdapterInterface
             $this->property->setUrl((string)$category->getUrl());
 
             foreach ($this->messageAttributes as $messageAttribute) {
-                if ($category->getData($messageAttribute)) {
-                    $this->property->setDescription($category->getData($messageAttribute));
+                $description = (string)$category->getData($messageAttribute);
+                $description = $this->prepareOgDescription($description);
+
+                if ($description) {
+                    $this->property->setDescription($description);
                 }
             }
+
+            $type = Page::HOME_PAGE_TYPE;
+            $this->property->addProperty('type', $type);
 
             if ($category->hasLandingPage() && !$this->property->getProperty('description')) {
                 $this->property->setDescription(
@@ -113,5 +119,44 @@ class Category implements AdapterInterface
         }
 
         return $this->property;
+    }
+
+    private function prepareOgDescription(?string $text, int $limit = 200): string
+    {
+        if (!$text) {
+            return '';
+        }
+
+        // Remove style and script blocks
+        $text = preg_replace('#<style\b[^>]*>.*?</style>#is', ' ', $text);
+        $text = preg_replace('#<script\b[^>]*>.*?</script>#is', ' ', $text);
+
+        // Remove Magento widgets {{widget ...}}
+        $text = preg_replace('/\{\{.*?\}\}/s', ' ', $text);
+
+        // Remove CSS-like content (very important for Page Builder)
+        $text = preg_replace('/\.[a-zA-Z0-9\-_]+\s*\{[^}]+\}/', ' ', $text);
+
+        // Remove HTML
+        $text = strip_tags($text);
+
+        // Decode entities
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        // Replace bullets
+        $text = preg_replace('/[∙•]+/u', ', ', $text);
+
+        // Clean spacing
+        $text = preg_replace('/\s+/u', ' ', $text);
+        $text = trim($text, " ,");
+
+        // Cut to 200 chars (word-safe)
+        if (mb_strlen($text) > $limit) {
+            $cut = mb_substr($text, 0, $limit);
+            $lastSpace = mb_strrpos($cut, ' ');
+            $text = ($lastSpace !== false ? mb_substr($cut, 0, $lastSpace) : $cut) . '...';
+        }
+
+        return $text;
     }
 }
