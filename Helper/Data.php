@@ -193,4 +193,13 @@ class Data extends AbstractHelper
     {
         return $this->localeProvider->getOgLocale();
     }
+
+    public function getDesignDefaultDescription($store = null): ?string
+    {
+        return $this->scopeConfig->getValue(
+            'design/head/default_description',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+    }
 }

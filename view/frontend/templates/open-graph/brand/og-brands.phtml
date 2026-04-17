@@ -1,0 +1,26 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Web200\Seo\ViewModel\BrandListOpenGraph $viewModel
+ */
+$viewModel = $block->getData('view_model');
+?>
+<?php if ($title = $viewModel->getTitle()): ?>
+    <meta property="og:title" content="<?= $block->escapeHtmlAttr($title) ?>" />
+<?php endif; ?>
+
+<?php if ($image = $viewModel->getImage()): ?>
+    <meta property="og:image" content="<?= $image ?>"/>
+<?php endif; ?>
+
+<?php if ($url = $viewModel->getOgUrl()): ?>
+    <meta property="og:url" content="<?= $block->escapeUrl($url) ?>" />
+<?php endif; ?>
+
+<?php if ($description = $viewModel->getOgDescription()): ?>
+    <meta property="og:description" content="<?= $block->escapeHtmlAttr($description) ?>" />
+<?php endif; ?>
+
+<meta property="og:type" content="<?= $block->escapeHtmlAttr($viewModel->getOgType()) ?>" />
+<meta property="og:locale" content="<?= $block->escapeHtmlAttr($viewModel->getOgLocale()) ?>" />
+
