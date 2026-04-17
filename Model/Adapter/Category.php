@@ -9,6 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Web200\Seo\Api\Data\AdapterInterface;
 use Web200\Seo\Api\Data\PropertyInterface;
+use Web200\Seo\Helper\Data;
 use Web200\Seo\Model\BlockParser;
 use Web200\Seo\Model\Property;
 use Web200\Seo\Model\Store\LocaleProvider;
@@ -55,23 +56,31 @@ class Category implements AdapterInterface
     private LocaleProvider $localeProvider;
 
     /**
+     * @var Data
+     */
+    private Data $helper;
+
+    /**
      * Category constructor.
      *
      * @param PropertyInterface $property
      * @param BlockParser $blockParser
      * @param Registry $registry
      * @param LocaleProvider $localeProvider
+     * @param Data $helper
      */
     public function __construct(
         PropertyInterface $property,
         BlockParser $blockParser,
         Registry $registry,
-        LocaleProvider $localeProvider
+        LocaleProvider $localeProvider,
+        Data $helper
     ) {
         $this->registry    = $registry;
         $this->property    = $property;
         $this->blockParser = $blockParser;
         $this->localeProvider = $localeProvider;
+        $this->helper = $helper;
     }
 
     /**
@@ -90,7 +99,7 @@ class Category implements AdapterInterface
 
             foreach ($this->messageAttributes as $messageAttribute) {
                 $description = (string)$category->getData($messageAttribute);
-                $description = $this->prepareOgDescription($description);
+                $description = $this->helper->prepareOgDescription($description);
 
                 if ($description) {
                     $this->property->setDescription($description);
@@ -119,44 +128,5 @@ class Category implements AdapterInterface
         }
 
         return $this->property;
-    }
-
-    private function prepareOgDescription(?string $text, int $limit = 200): string
-    {
-        if (!$text) {
-            return '';
-        }
-
-        // Remove style and script blocks
-        $text = preg_replace('#<style\b[^>]*>.*?</style>#is', ' ', $text);
-        $text = preg_replace('#<script\b[^>]*>.*?</script>#is', ' ', $text);
-
-        // Remove Magento widgets {{widget ...}}
-        $text = preg_replace('/\{\{.*?\}\}/s', ' ', $text);
-
-        // Remove CSS-like content (very important for Page Builder)
-        $text = preg_replace('/\.[a-zA-Z0-9\-_]+\s*\{[^}]+\}/', ' ', $text);
-
-        // Remove HTML
-        $text = strip_tags($text);
-
-        // Decode entities
-        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-
-        // Replace bullets
-        $text = preg_replace('/[∙•]+/u', ', ', $text);
-
-        // Clean spacing
-        $text = preg_replace('/\s+/u', ' ', $text);
-        $text = trim($text, " ,");
-
-        // Cut to 200 chars (word-safe)
-        if (mb_strlen($text) > $limit) {
-            $cut = mb_substr($text, 0, $limit);
-            $lastSpace = mb_strrpos($cut, ' ');
-            $text = ($lastSpace !== false ? mb_substr($cut, 0, $lastSpace) : $cut) . '...';
-        }
-
-        return $text;
     }
 }

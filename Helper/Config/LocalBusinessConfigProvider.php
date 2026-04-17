@@ -8,6 +8,7 @@ use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Web200\Seo\Helper\Data as DataHelper;
+use Web200\Seo\Model\Store\LocaleProvider;
 
 class LocalBusinessConfigProvider extends DataHelper
 {
@@ -43,9 +44,10 @@ class LocalBusinessConfigProvider extends DataHelper
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,
-        RegionFactory $regionFactory
+        RegionFactory $regionFactory,
+        LocaleProvider $localeProvider
     ) {
-        parent::__construct($context, $storeManager);
+        parent::__construct($context, $storeManager, $localeProvider);
         $this->storeManager = $storeManager;
         $this->regionFactory = $regionFactory;
     }

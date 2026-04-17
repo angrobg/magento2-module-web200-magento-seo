@@ -10,6 +10,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Config\Model\Config\Backend\Image\Logo;
 use Web200\Seo\Model\Config\Backend\Image;
+use Web200\Seo\Model\Store\LocaleProvider;
 
 class Data extends AbstractHelper
 {
@@ -20,13 +21,16 @@ class Data extends AbstractHelper
 
     protected ?StoreInterface $store = null;
     private StoreManagerInterface $storeManager;
+    private LocaleProvider $localeProvider;
 
     public function __construct(
         Context $context,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        LocaleProvider $localeProvider
     ) {
         parent::__construct($context);
         $this->storeManager = $storeManager;
+        $this->localeProvider = $localeProvider;
     }
 
     public function isModuleActive($storeId = null): bool
@@ -144,5 +148,49 @@ class Data extends AbstractHelper
         }
 
         return '';
+    }
+
+    public function prepareOgDescription(?string $text, int $limit = 200): string
+    {
+        if (!$text) {
+            return '';
+        }
+
+        // Remove style and script blocks
+        $text = preg_replace('#<style\b[^>]*>.*?</style>#is', ' ', $text);
+        $text = preg_replace('#<script\b[^>]*>.*?</script>#is', ' ', $text);
+
+        // Remove Magento widgets {{widget ...}}
+        $text = preg_replace('/\{\{.*?\}\}/s', ' ', $text);
+
+        // Remove CSS-like content (very important for Page Builder)
+        $text = preg_replace('/\.[a-zA-Z0-9\-_]+\s*\{[^}]+\}/', ' ', $text);
+
+        // Remove HTML
+        $text = strip_tags($text);
+
+        // Decode entities
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        // Replace bullets
+        $text = preg_replace('/[∙•]+/u', ', ', $text);
+
+        // Clean spacing
+        $text = preg_replace('/\s+/u', ' ', $text);
+        $text = trim($text, " ,");
+
+        // Cut to 200 chars (word-safe)
+        if (mb_strlen($text) > $limit) {
+            $cut = mb_substr($text, 0, $limit);
+            $lastSpace = mb_strrpos($cut, ' ');
+            $text = ($lastSpace !== false ? mb_substr($cut, 0, $lastSpace) : $cut) . '...';
+        }
+
+        return $text;
+    }
+
+    public function getOgLocale(): string
+    {
+        return $this->localeProvider->getOgLocale();
     }
 }
