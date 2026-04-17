@@ -7,6 +7,7 @@ namespace Web200\Seo\ViewModel;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\UrlInterface;
+use Web200\Seo\Helper\Data;
 use Web200\Seo\Model\Adapter\Page;
 use Web200\Seo\Model\Store\LocaleProvider;
 
@@ -28,14 +29,21 @@ class OpenGraph implements ArgumentInterface
      */
     private LocaleProvider $localeProvider;
 
+    /**
+     * @var Data
+     */
+    private Data $helper;
+
     public function __construct(
         PageConfig $pageConfig,
         UrlInterface $urlBuilder,
-        LocaleProvider $localeProvider
+        LocaleProvider $localeProvider,
+        Data $helper
     ) {
         $this->pageConfig = $pageConfig;
         $this->urlBuilder = $urlBuilder;
         $this->localeProvider = $localeProvider;
+        $this->helper = $helper;
     }
 
     public function getOgTitle(): string
@@ -74,5 +82,10 @@ class OpenGraph implements ArgumentInterface
     public function hasOgDescription(): bool
     {
         return $this->getOgDescription() !== '';
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->helper->getOgDefaultImage();
     }
 }

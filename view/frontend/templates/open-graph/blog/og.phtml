@@ -10,6 +10,10 @@ $viewModel = $block->getData('view_model');
     <meta property="og:title" content="<?= $block->escapeHtmlAttr($viewModel->getOgTitle()) ?>" />
 <?php endif; ?>
 
+<?php if ($image = $viewModel->getImage()) { ?>
+    <meta property="og:image" content="<?= $image ?>" />
+<?php } ?>
+
 <meta property="og:url" content="<?= $block->escapeUrl($viewModel->getOgUrl()) ?>" />
 
 <?php if ($viewModel->hasOgDescription()): ?>
