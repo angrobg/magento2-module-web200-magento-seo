@@ -18,7 +18,7 @@ if (!isset($escaper)) {
 <meta property="og:title" content="<?= $escaper->escapeHtml($block->getTitle()); ?>" />
 <meta property="og:description" content="<?= $escaper->escapeHtml($block->getDescription()); ?>" />
 <meta property="og:url" content="<?= $escaper->escapeHtml($block->getPageUrl()); ?>" />
-<?php if ($image = $block->getImage()) { ?>
+<?php if ($image = $block->getImage() ?: $viewModel->getImage()) { ?>
     <meta property="og:image" content="<?= $escaper->escapeHtml($image); ?>" />
 <?php } ?>
 <meta property="og:locale" content="<?= $block->escapeHtml($viewModel->getOgLocale()) ?>" />

@@ -92,7 +92,7 @@ class BrandOpenGraph implements ArgumentInterface
 
     public function getOgType(): string
     {
-        return Page::HOME_PAGE_TYPE;
+        return Page::OG_TYPE;
     }
 
     public function getOgLocale(): string

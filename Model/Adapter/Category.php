@@ -106,7 +106,7 @@ class Category implements AdapterInterface
                 }
             }
 
-            $type = Page::HOME_PAGE_TYPE;
+            $type = Page::OG_TYPE;
             $this->property->addProperty('type', $type);
 
             if ($category->hasLandingPage() && !$this->property->getProperty('description')) {
@@ -115,9 +115,12 @@ class Category implements AdapterInterface
                 );
             }
 
-            if ($category->getImageUrl()) {
-                $this->property->setImage((string)$category->getImageUrl());
+            $image = $this->getImage($category->getImageUrl());
+
+            if ($image) {
+                $this->property->setImage((string)$image);
             }
+
             $this->property->addProperty('item', $category->getData(), Property::META_DATA_GROUP);
 
             $locale = $this->localeProvider->getOgLocale();
@@ -128,5 +131,10 @@ class Category implements AdapterInterface
         }
 
         return $this->property;
+    }
+
+    private function getImage(bool $imageUrl)
+    {
+        return $imageUrl ?: $this->helper->getOgDefaultImage();
     }
 }
