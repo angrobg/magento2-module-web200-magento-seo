@@ -133,7 +133,7 @@ class Category implements AdapterInterface
         return $this->property;
     }
 
-    private function getImage(bool $imageUrl)
+    private function getImage($imageUrl)
     {
         return $imageUrl ?: $this->helper->getOgDefaultImage();
     }
