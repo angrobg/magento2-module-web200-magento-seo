@@ -9,6 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Web200\Seo\Api\Data\AdapterInterface;
 use Web200\Seo\Api\Data\PropertyInterface;
+use Web200\Seo\Helper\Data;
 use Web200\Seo\Model\BlockParser;
 use Web200\Seo\Model\Property;
 use Web200\Seo\Model\Store\LocaleProvider;
@@ -29,7 +30,7 @@ class Category implements AdapterInterface
      *
      * @var string[] $messageAttributes
      */
-    protected $messageAttributes = ['meta_description', 'description'];
+    protected $messageAttributes = ['description', 'meta_description'];
     /**
      * Registry
      *
@@ -55,23 +56,31 @@ class Category implements AdapterInterface
     private LocaleProvider $localeProvider;
 
     /**
+     * @var Data
+     */
+    private Data $helper;
+
+    /**
      * Category constructor.
      *
      * @param PropertyInterface $property
      * @param BlockParser $blockParser
      * @param Registry $registry
      * @param LocaleProvider $localeProvider
+     * @param Data $helper
      */
     public function __construct(
         PropertyInterface $property,
         BlockParser $blockParser,
         Registry $registry,
-        LocaleProvider $localeProvider
+        LocaleProvider $localeProvider,
+        Data $helper
     ) {
         $this->registry    = $registry;
         $this->property    = $property;
         $this->blockParser = $blockParser;
         $this->localeProvider = $localeProvider;
+        $this->helper = $helper;
     }
 
     /**
@@ -89,10 +98,16 @@ class Category implements AdapterInterface
             $this->property->setUrl((string)$category->getUrl());
 
             foreach ($this->messageAttributes as $messageAttribute) {
-                if ($category->getData($messageAttribute)) {
-                    $this->property->setDescription($category->getData($messageAttribute));
+                $description = (string)$category->getData($messageAttribute);
+                $description = $this->helper->prepareOgDescription($description);
+
+                if ($description) {
+                    $this->property->setDescription($description);
                 }
             }
+
+            $type = Page::OG_TYPE;
+            $this->property->addProperty('type', $type);
 
             if ($category->hasLandingPage() && !$this->property->getProperty('description')) {
                 $this->property->setDescription(
@@ -100,9 +115,12 @@ class Category implements AdapterInterface
                 );
             }
 
-            if ($category->getImageUrl()) {
-                $this->property->setImage((string)$category->getImageUrl());
+            $image = $this->getImage($category->getImageUrl());
+
+            if ($image) {
+                $this->property->setImage((string)$image);
             }
+
             $this->property->addProperty('item', $category->getData(), Property::META_DATA_GROUP);
 
             $locale = $this->localeProvider->getOgLocale();
@@ -113,5 +131,10 @@ class Category implements AdapterInterface
         }
 
         return $this->property;
+    }
+
+    private function getImage($imageUrl)
+    {
+        return $imageUrl ?: $this->helper->getOgDefaultImage();
     }
 }

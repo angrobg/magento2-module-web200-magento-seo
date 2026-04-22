@@ -8,10 +8,10 @@ use Magento\Cms\Model\Page as CmsPage;
 use Magento\Framework\UrlInterface;
 use Web200\Seo\Api\Data\AdapterInterface;
 use Web200\Seo\Api\Data\PropertyInterface;
+use Web200\Seo\Helper\Data;
 use Web200\Seo\Model\Property;
 use Web200\Seo\Model\Store\LocaleProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class Page
@@ -24,7 +24,7 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Page implements AdapterInterface
 {
-    const HOME_PAGE_TYPE = 'website';
+    const OG_TYPE = 'website';
     const CMS_PAGE_TYPE = 'article';
     /**
      * Property interface
@@ -51,9 +51,9 @@ class Page implements AdapterInterface
     private LocaleProvider $localeProvider;
 
     /**
-     * @var ScopeConfigInterface
+     * @var Data
      */
-    private ScopeConfigInterface $scopeConfig;
+    private Data $helper;
 
     /**
      * Page constructor.
@@ -62,20 +62,20 @@ class Page implements AdapterInterface
      * @param UrlInterface $url
      * @param PropertyInterface $property
      * @param LocaleProvider $localeProvider
-     * @param ScopeConfigInterface $scopeConfig
+     * @param Data $helper
      */
     public function __construct(
         CmsPage $page,
         UrlInterface $url,
         PropertyInterface $property,
         LocaleProvider $localeProvider,
-        ScopeConfigInterface $scopeConfig
+        Data $helper
     ) {
         $this->property = $property;
         $this->page     = $page;
         $this->url      = $url;
         $this->localeProvider = $localeProvider;
-        $this->scopeConfig = $scopeConfig;
+        $this->helper = $helper;
     }
 
     /**
@@ -90,16 +90,18 @@ class Page implements AdapterInterface
             $this->property->setDescription((string)$this->page->getMetaDescription());
             $this->property->setUrl((string)$this->url->getUrl($this->page->getIdentifier()));
             $this->property->addProperty('item', $this->page->getData(), Property::META_DATA_GROUP);
-            $type = self::CMS_PAGE_TYPE;
 
-            if ($this->isHomePage($this->page)) {
-                $type = self::HOME_PAGE_TYPE;
+            $type = self::OG_TYPE;
+            $ogImage = $this->helper->getOgDefaultImage();
+
+            if ($this->page && $this->page->getOpenGraphImageUrl()) {
                 $ogImage = $this->page->getOpenGraphImageUrl();
-
-                if ($ogImage) {
-                    $this->property->addProperty('image', $ogImage);
-                }
             }
+
+            if ($ogImage) {
+                $this->property->addProperty('image', $ogImage);
+            }
+
             $this->property->addProperty('type', $type);
             $locale = $this->localeProvider->getOgLocale();
 
@@ -110,15 +112,5 @@ class Page implements AdapterInterface
         }
 
         return $this->property;
-    }
-
-    private function isHomePage(CmsPage $page): bool
-    {
-        $homePageIdentifier = (string)$this->scopeConfig->getValue(
-            'web/default/cms_home_page',
-            ScopeInterface::SCOPE_STORE
-        );
-
-        return $page->getIdentifier() === $homePageIdentifier;
     }
 }

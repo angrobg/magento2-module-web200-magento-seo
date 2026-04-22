@@ -1,6 +1,21 @@
 <?xml version="1.0"?>
 <config xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <system>
+        <section id="shopbrand">
+            <group id="general">
+                <field id="description"
+                       translate="label comment"
+                       type="textarea"
+                       sortOrder="3"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="1"
+                       canRestore="1">
+                    <label>Description</label>
+                    <comment>Description</comment>
+                </field>
+            </group>
+        </section>
         <section id="seo" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Search Engine Optimization</label>
             <tab>general</tab>
@@ -16,10 +31,16 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="image_path" translate="label comment" type="image" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Logo</label>
+                    <label>Google Reach Results Logo</label>
                     <backend_model>Web200\Seo\Model\Config\Backend\Image</backend_model>
                     <base_url type="media" scope_info="1">seomarkup</base_url>
                     <comment><![CDATA[Allowed file types: JPG, JPEG, GIF, PNG]]></comment>
+                </field>
+                <field id="og_default_image" translate="label comment" type="image" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Open Graph Site Image</label>
+                    <backend_model>Web200\Seo\Model\Config\Backend\Image</backend_model>
+                    <base_url type="media" scope_info="1">seomarkup</base_url>
+                    <comment><![CDATA[Allowed file types: JPG, JPEG, PNG]]></comment>
                 </field>
             </group>
             <group id="verifications" translate="label,comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">

@@ -2,19 +2,29 @@
 /**
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Web200\Seo\ViewModel\OpenGraph $viewModel
+ * @var \Magento\Framework\Escaper $escaper
  */
+if (!isset($escaper)) {
+    /* Compatability fix for old Magento versions */
+    $escaper = $block;
+}
+
 $viewModel = $block->getData('view_model');
 ?>
 
 <?php if ($viewModel->hasOgTitle()): ?>
-    <meta property="og:title" content="<?= $block->escapeHtmlAttr($viewModel->getOgTitle()) ?>" />
+    <meta property="og:title" content="<?= $escaper->escapeHtml($viewModel->getOgTitle()) ?>" />
 <?php endif; ?>
+
+<?php if ($image = $viewModel->getImage()) { ?>
+    <meta property="og:image" content="<?= $image ?>" />
+<?php } ?>
 
 <meta property="og:url" content="<?= $block->escapeUrl($viewModel->getOgUrl()) ?>" />
 
 <?php if ($viewModel->hasOgDescription()): ?>
-    <meta property="og:description" content="<?= $block->escapeHtmlAttr($viewModel->getOgDescription()) ?>" />
+    <meta property="og:description" content="<?= $escaper->escapeHtml($viewModel->getOgDescription()) ?>" />
 <?php endif; ?>
 
-<meta property="og:type" content="<?= $block->escapeHtmlAttr($viewModel->getOgType()) ?>" />
-<meta property="og:locale" content="<?= $block->escapeHtmlAttr($viewModel->getOgLocale()) ?>" />
+<meta property="og:type" content="<?= $escaper->escapeHtml($viewModel->getOgType()) ?>" />
+<meta property="og:locale" content="<?= $escaper->escapeHtml($viewModel->getOgLocale()) ?>" />
